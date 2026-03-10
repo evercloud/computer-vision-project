@@ -6,10 +6,9 @@
 #include <cassert>
 
 // Implementation of the document-scanner pipeline.
-// Each function maps to exactly one logical step; read top-to-bottom.
+// Each function maps to a single logical step.
 
-
-// Step 1 & 2 – detectDocumentContour
+// Step 1 – detectDocumentContour
 std::vector<cv::Point> detectDocumentContour(const cv::Mat& image, bool debug,
                                               const std::string& outputDir)
 {
@@ -106,7 +105,7 @@ std::vector<cv::Point> detectDocumentContour(const cv::Mat& image, bool debug,
 }
 
 
-// Step 3a – orderCorners
+// Step 2 – orderCorners
 std::vector<cv::Point2f> orderCorners(const std::vector<cv::Point>& corners)
 {
     if (corners.size() != 4)
@@ -143,7 +142,7 @@ std::vector<cv::Point2f> orderCorners(const std::vector<cv::Point>& corners)
 }
 
 
-// Step 3b – warpDocument
+// Step 3 – warpDocument
 cv::Mat warpDocument(const cv::Mat& image,
                      const std::vector<cv::Point2f>& orderedCorners)
 {
@@ -179,7 +178,7 @@ cv::Mat warpDocument(const cv::Mat& image,
 }
 
 
-// Step 4 – binarizeDocument
+// Step 4 – binarizeDocument (pre-blur + adaptive threshold)
 cv::Mat binarizeDocument(const cv::Mat& warpedImage)
 {
     cv::Mat gray;
@@ -222,7 +221,7 @@ cv::Mat binarizeDocument(const cv::Mat& warpedImage)
 }
 
 
-// Step 5a – computeHorizontalProjection
+// Step 5 – computeHorizontalProjection
 std::vector<int> computeHorizontalProjection(const cv::Mat& binaryImage)
 {
     // THRESH_BINARY: text = BLACK (0), background = WHITE (255).
@@ -246,7 +245,7 @@ std::vector<int> computeHorizontalProjection(const cv::Mat& binaryImage)
 }
 
 
-// Step 5b – segmentTextLines
+// Step 6 – segmentTextLines
 std::vector<cv::Mat> segmentTextLines(const cv::Mat& binaryImage,
                                        const std::vector<int>& projection,
                                        int minLineHeight,

@@ -19,7 +19,8 @@ make
 ./document_scanner /path/to/photo.jpg --debug
 ```
 
-Output is saved to `build/output/<image_stem>/`. The `--debug` flag saves intermediate images (Canny edge map, detected contour, projection profile) to the same folder, useful for diagnosing failures.
+Output is saved to `build/output/<image_stem>/`. 
+The `--debug` flag saves intermediate images (Canny edge map, detected contour, projection profile) to the same folder, useful for diagnosing failures.
 
 ## Output files
 
