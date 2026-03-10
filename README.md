@@ -15,8 +15,8 @@ make
 ## Run
 
 ```bash
-./document_scanner /path/to/photo.jpg
-./document_scanner /path/to/photo.jpg --debug
+./document_scanner ../test_image_1.jpg
+./document_scanner ../test_image_1.jpg --debug
 ```
 
 Output is saved to `build/output/<image_stem>/`. 
