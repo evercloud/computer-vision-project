@@ -55,6 +55,9 @@ std::vector<cv::Point> detectDocumentContour(const cv::Mat& image, bool debug,
                                                cv::Size(dilateK, dilateK));
     cv::dilate(edges, edges, kernel);
 
+    if (debug)
+        cv::imwrite(outputDir + "/debug_dilate.png", edges);
+
     // RETR_EXTERNAL: retrieves only outermost contours; inner edges
     // (text, table lines) are ignored. CHAIN_APPROX_SIMPLE saves memory.
     std::vector<std::vector<cv::Point>> contours;
@@ -308,15 +311,18 @@ std::vector<cv::Mat> segmentTextLines(const cv::Mat& binaryImage,
     // Debug: save the projection as a bar chart (black bars, white gaps).
     if (debug && !projection.empty())
     {
+        // Get the maximum value by deferencing the pointer the max element (iterator)
         int maxVal = *std::max_element(projection.begin(), projection.end());
 
         const int canvasWidth = 400;
+
+        // Create a white (255) filling into a grayscale (CV_8UC1) matrix
         cv::Mat profileCanvas(static_cast<int>(projection.size()),
                               canvasWidth, CV_8UC1, cv::Scalar(255));
 
-        for (int r = 0; r < static_cast<int>(projection.size()); ++r)
+        if (maxVal > 0)
         {
-            if (maxVal > 0)
+            for (int r = 0; r < static_cast<int>(projection.size()); ++r)
             {
                 int barLen = static_cast<int>((projection[r] / static_cast<double>(maxVal))
                                               * (canvasWidth - 1));
